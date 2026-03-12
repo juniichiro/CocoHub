@@ -28,7 +28,6 @@
                     <x-nav-link :href="route('buyer.history')" :active="request()->routeIs('buyer.history')" class="text-sm font-bold">
                         {{ __('History') }}
                     </x-nav-link>
-                    
                     <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.*') || request()->routeIs('buyer.profile')" class="text-sm font-bold">
                         {{ __('Profile') }}
                     </x-nav-link>
@@ -48,7 +47,7 @@
             </div>
 
             <div class="-mr-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
+                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-[#738D56] hover:bg-gray-50 focus:outline-none transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -58,26 +57,41 @@
         </div>
     </div>
 
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-white border-t border-gray-100">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('buyer.home')" :active="request()->routeIs('buyer.home')">
+    {{-- Fully Aligned Responsive Nav --}}
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-white border-t border-gray-100 animate-fade-in">
+        <div class="pt-2 pb-6 space-y-1 px-4">
+            <x-responsive-nav-link :href="route('buyer.home')" :active="request()->routeIs('buyer.home')" class="font-bold">
                 {{ __('Home') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('buyer.product')" :active="request()->routeIs('buyer.product')">
+            
+            <x-responsive-nav-link :href="route('buyer.product')" :active="request()->routeIs('buyer.product')" class="font-bold">
                 {{ __('Products') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.*')">
+
+            <x-responsive-nav-link :href="route('buyer.cart')" :active="request()->routeIs('buyer.cart')" class="font-bold">
+                {{ __('Cart') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('buyer.checkout')" :active="request()->routeIs('buyer.checkout')" class="font-bold">
+                {{ __('Checkout') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('buyer.history')" :active="request()->routeIs('buyer.history')" class="font-bold">
+                {{ __('History') }}
+            </x-responsive-nav-link>
+            
+            <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.*')" class="font-bold">
                 {{ __('Profile') }}
             </x-responsive-nav-link>
             
-            <form method="POST" action="{{ route('logout') }}" class="mt-4 border-t border-gray-100 pt-4">
-                @csrf
-                <x-responsive-nav-link :href="route('logout')"
-                        onclick="event.preventDefault(); this.closest('form').submit();"
-                        class="text-red-500">
-                    {{ __('Log Out') }}
-                </x-responsive-nav-link>
-            </form>
+            <div class="border-t border-gray-100 mt-4 pt-4">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full text-left px-3 py-2 text-sm font-bold text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                        {{ __('Log Out') }}
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
 </nav>
