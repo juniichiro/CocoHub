@@ -3,11 +3,14 @@
         <div class="flex justify-between h-20">
             <div class="flex items-center gap-12">
                 <div class="shrink-0 flex items-center gap-3">
-                    <a href="{{ route('buyer.home') }}" class="flex items-center gap-3">
-                        <img src="{{ asset('images/coco-hub.png') }}" alt="CocoHub Logo" class="h-10 w-10 object-contain">
+                    <a href="{{ route('buyer.home') }}" class="flex items-center gap-3 group">
+                        <img src="{{ asset('images/coco-hub.png') }}" alt="CocoHub Logo" class="h-10 w-10 object-contain transition-transform group-hover:scale-105">
                         <div class="flex flex-col">
-                            <span class="text-xl font-bold text-[#738D56] leading-none text-nowrap">CocoHub</span>
-                            <span class="text-[10px] text-gray-400 uppercase tracking-tighter">by Lumiere</span>
+                            {{-- Branding: Coco (Brown) + Hub (Green) --}}
+                            <h1 class="text-xl font-extrabold leading-none tracking-tight">
+                                <span class="text-[#6D4C41]">Coco</span><span class="text-[#738D56]">Hub</span>
+                            </h1>
+                            <span class="text-[10px] text-gray-400 uppercase tracking-widest font-bold mt-0.5">Lumiere</span>
                         </div>
                     </a>
                 </div>
@@ -37,7 +40,7 @@
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 hover:border-red-100 transition duration-300 text-sm font-medium group">
+                    <button type="submit" class="flex items-center gap-2 px-4 py-2 border border-gray-100 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 hover:border-red-100 transition duration-300 text-sm font-bold group">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:rotate-12 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                         </svg>
@@ -58,7 +61,7 @@
     </div>
 
     {{-- Fully Aligned Responsive Nav --}}
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-white border-t border-gray-100 animate-fade-in">
+    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-white border-t border-gray-100 animate-fade-in" x-cloak>
         <div class="pt-2 pb-6 space-y-1 px-4">
             <x-responsive-nav-link :href="route('buyer.home')" :active="request()->routeIs('buyer.home')" class="font-bold">
                 {{ __('Home') }}
@@ -84,10 +87,13 @@
                 {{ __('Profile') }}
             </x-responsive-nav-link>
             
-            <div class="border-t border-gray-100 mt-4 pt-4">
+            <div class="border-t border-gray-100 mt-4 pt-4 px-3">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="w-full text-left px-3 py-2 text-sm font-bold text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                    <button type="submit" class="w-full flex items-center gap-3 py-3 text-sm font-bold text-red-500 hover:bg-red-50 rounded-xl transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
                         {{ __('Log Out') }}
                     </button>
                 </form>

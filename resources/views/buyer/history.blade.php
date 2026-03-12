@@ -7,23 +7,21 @@
     @include('layouts.navigation')
 
     <main class="flex-grow max-w-7xl mx-auto px-8 lg:px-20 py-12 w-full">
-        <header class="mb-10 flex justify-between items-end">
-            <div>
-                <span class="text-[#738D56] text-xs font-black uppercase tracking-[0.2em] bg-white px-4 py-2 rounded-full border border-gray-100 shadow-sm">
-                    Account Activity
-                </span>
-                <h1 class="text-4xl font-black text-gray-900 mt-6 tracking-tight">History Transactions</h1>
+        <header class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div class="text-center md:text-left">
+                <span class="text-[#738D56] text-xs font-bold uppercase tracking-[0.2em] bg-[#738D56]/10 px-3 py-1 rounded-full">Account Activity</span>
+                <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 mt-3 leading-tight">History<br class="hidden md:block"> Transactions</h1>
             </div>
-
-            <form action="{{ route('buyer.history') }}" method="GET" class="flex gap-3">
-                <select name="status" onchange="this.form.submit()" 
-                        class="px-6 py-3 bg-white border-none rounded-2xl text-xs font-black focus:ring-2 focus:ring-[#738D56] shadow-sm cursor-pointer text-gray-600 outline-none uppercase tracking-tighter">
-                    <option value="">All Orders</option>
-                    <option value="Awaiting Shipping" {{ request('status') == 'Awaiting Shipping' ? 'selected' : '' }}>Awaiting Shipping</option>
-                    <option value="On Delivery" {{ request('status') == 'On Delivery' ? 'selected' : '' }}>On Delivery</option>
-                    <option value="Completed" {{ request('status') == 'Completed' ? 'selected' : '' }}>Completed</option>
+            
+            {{-- Filter Dropdown aligned to the bottom right on desktop --}}
+            <div class="w-full md:w-auto">
+                <select class="w-full md:w-48 bg-white border border-gray-100 rounded-xl px-4 py-3 text-xs font-bold uppercase tracking-widest text-gray-500 shadow-sm focus:ring-[#738D56] focus:border-[#738D56]">
+                    <option>All Orders</option>
+                    <option>Pending</option>
+                    <option>Shipped</option>
+                    <option>Completed</option>
                 </select>
-            </form>
+            </div>
         </header>
 
         @if(session('status'))
