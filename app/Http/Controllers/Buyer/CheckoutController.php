@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Http\Controllers\Buyer;
+
+use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\Order;
+use App\Models\OrderItem;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+class CheckoutController extends Controller
+{
+    public function index()
+    {
+        $cart = Cart::where('user_id', Auth::id())->with('items.product')->first();
+
+        if (!$cart || $cart->items->isEmpty()) {
+            return redirect()->route('buyer.product')->with('error', 'Your cart is empty.');
+        }
+
+        return view('buyer.checkout', compact('cart'));
+    }
+
+    public function process(Request $request)
+    {
+        $request->validate([
+            'shipping_address' => 'required|string|max:500',
+            'payment_method' => 'required|string',
+        ]);
+
+        $cart = Cart::where('user_id', Auth::id())->with('items.product')->first();
+
+        // Database Transaction to ensure data integrity
+        DB::transaction(function () use ($request, $cart) {
+            $subtotal = $cart->items->sum(fn($item) => $item->product->price * $item->quantity);
+            $total = $subtotal + 80; // Total + Delivery Fee
+
+            // 1. Create the Order
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'total_amount' => $total,
+                'status' => 'Awaiting Shipping', // Default status for seller tracking
+                'payment_method' => $request->payment_method,
+                'shipping_address' => $request->shipping_address,
+            ]);
+
+            // 2. Move items from Cart to OrderItems & Reduce Product Stock
+            foreach ($cart->items as $item) {
+                OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item->product_id,
+                    'quantity' => $item->quantity,
+                    'price' => $item->product->price,
+                ]);
+
+                // Reduce stock in products table
+                $item->product->decrement('stock', $item->quantity);
+            }
+
+            // 3. Clear the Cart
+            $cart->items()->delete();
+        });
+
+        return redirect()->route('buyer.history')->with('status', 'Order placed successfully!');
+    }
+}
