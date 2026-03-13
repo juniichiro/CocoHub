@@ -9,8 +9,10 @@
         <div class="flex items-center gap-3">
             <img src="{{ asset('images/coco-hub.png') }}" alt="CocoHub Logo" class="h-10 w-10 object-contain">
             <div class="flex flex-col">
-                <span class="text-xl font-bold text-[#738D56] leading-none text-nowrap">CocoHub</span>
-                <span class="text-[10px] text-gray-400 uppercase tracking-tighter">by Lumiere</span>
+                <h1 class="text-xl font-extrabold leading-none tracking-tight">
+                    <span class="text-[#6D4C41]">Coco</span><span class="text-[#738D56]">Hub</span>
+                </h1>
+                <span class="text-[10px] text-gray-400 uppercase tracking-tighter">Lumiere</span>
             </div>
         </div>
     </header>
