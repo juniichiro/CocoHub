@@ -5,8 +5,7 @@
             {{-- Brand Section --}}
             <div class="space-y-4">
                 <div class="flex items-center gap-1">
-                    <span class="text-2xl font-bold text-[#6D4C41]">Coco</span>
-                    <span class="text-2xl font-bold text-[#738D56]">Hub</span>
+                    <span class="text-2xl font-bold text-[#6D4C41]">Coco<span class="text-2xl font-bold text-[#738D56]">Hub</span></span>
                 </div>
                 <p class="text-sm text-gray-400 font-medium">Developed by: Lumiere</p>
                 
@@ -62,7 +61,7 @@
                             lumiere.assist@gmail.com
                         </a>
                     </li>
-                    <li class="text-gray-400 text-sm font-medium">+63921 123 4567</li>
+                    <li class="text-gray-400 text-sm font-medium">+63 921 123 4567</li>
                 </ul>
             </div>
 

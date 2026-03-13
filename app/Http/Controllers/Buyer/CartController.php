@@ -26,35 +26,31 @@ class CartController extends Controller
     /**
      * Add a product to the cart.
      */
-    public function add(Request $request, $productId)
+    public function add(Request $request, Product $product)
     {
-        $product = Product::findOrFail($productId);
-        
-        // Get quantity from request or default to 1
-        $quantityToAdd = $request->input('quantity', 1);
-
-        if ($product->stock < $quantityToAdd) {
-            return back()->with('error', 'Sorry, only ' . $product->stock . ' units are available.');
+        // 1. Safety Check: Is it in stock?
+        if ($product->stock <= 0) {
+            return back()->with('error', 'Sorry, this item is out of stock.');
         }
 
+        // 2. Find or Create the User's Cart
         $cart = Cart::firstOrCreate(['user_id' => Auth::id()]);
-        $cartItem = $cart->items()->where('product_id', $productId)->first();
+
+        // 3. Check if the item already exists in the cart
+        $cartItem = $cart->items()->where('product_id', $product->id)->first();
 
         if ($cartItem) {
-            $newQuantity = $cartItem->quantity + $quantityToAdd;
-            
-            if ($newQuantity <= $product->stock) {
-                $cartItem->update(['quantity' => $newQuantity]);
-            } else {
-                return back()->with('error', 'Adding this would exceed available stock.');
-            }
+            // Increase quantity if it exists
+            $cartItem->increment('quantity');
         } else {
+            // Create a new item if it doesn't
             $cart->items()->create([
-                'product_id' => $productId,
-                'quantity' => $quantityToAdd
+                'product_id' => $product->id,
+                'quantity' => 1,
             ]);
         }
 
+        // 4. Return with the Success status you already check for in your Blade
         return back()->with('status', 'added-to-cart');
     }
 

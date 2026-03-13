@@ -15,11 +15,9 @@
                     <h2 class="text-3xl font-bold text-gray-900">Sales Report</h2>
                 </div>
                 <div class="flex gap-4">
-                    <form action="{{ route('seller.sales') }}" method="GET" class="relative">
-                        <input type="text" name="search" placeholder="Search Order ID..." value="{{ request('search') }}"
-                            class="px-6 py-3 bg-white border border-gray-100 rounded-2xl text-sm outline-none w-64 focus:ring-2 focus:ring-[#738D56] transition-all">
-                    </form>
-                    <button onclick="window.print()" class="px-6 py-3 bg-white border border-gray-100 rounded-2xl text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all">Export Report</button>
+                    <a href="{{ route('seller.sales.export') }}" class="px-6 py-3 bg-[#738D56] text-white rounded-2xl text-sm font-bold hover:bg-[#5f7547] transition-all shadow-lg shadow-[#738D56]/20">
+                        Export PDF Report
+                    </a>
                 </div>
             </div>
 

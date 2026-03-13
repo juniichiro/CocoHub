@@ -5,7 +5,7 @@
                 <img src="{{ asset('images/coco-hub.png') }}" class="w-6 h-6" alt="Logo">
             </div>
             <div>
-                <h1 class="text-lg font-bold text-[#6D4C41] leading-none">CocoHub</h1>
+                <span class="text-l font-bold text-[#6D4C41]">Coco<span class="text-l font-bold text-[#738D56]">Hub</span></span>
                 <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest mt-1">Seller's Portal</p>
             </div>
         </div>

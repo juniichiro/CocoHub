@@ -14,10 +14,11 @@ class CheckoutController extends Controller
 {
     public function index()
     {
-        $cart = Cart::where('user_id', Auth::id())->with('items.product')->first();
+        $cart = Cart::where('user_id', auth()->id())->with('items.product')->first();
 
         if (!$cart || $cart->items->isEmpty()) {
-            return redirect()->route('buyer.product')->with('error', 'Your cart is empty.');
+            // Redirect back to the cart with a specific status
+            return redirect()->route('buyer.cart')->with('status', 'cart-empty');
         }
 
         return view('buyer.checkout', compact('cart'));

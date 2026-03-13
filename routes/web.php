@@ -74,7 +74,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('seller')->name('seller.')->group(function () {
         
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
         Route::get('/sales', [SalesController::class, 'index'])->name('sales'); 
+        Route::get('/seller/sales/export', [SalesController::class, 'exportPDF'])->name('sales.export');
 
         // Storefront Management
         Route::controller(StorefrontController::class)->group(function () {

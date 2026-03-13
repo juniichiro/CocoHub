@@ -7,6 +7,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SalesController extends Controller
 {
@@ -90,5 +91,33 @@ class SalesController extends Controller
             'hourlySales' => $hourlySales, // Now a guaranteed 24-point array
             'monthlySales' => $monthlySales
         ]);
+    }
+
+    public function exportPDF()
+    {
+        $today = Carbon::today('Asia/Manila');
+        $now = Carbon::now('Asia/Manila');
+
+        // Fetch data with relationships to get the real names
+        $data = [
+            'totalSalesToday' => Order::where('status', 'Completed')->whereDate('created_at', $today)->sum('total_amount'),
+            'totalSalesMonth' => Order::where('status', 'Completed')->whereMonth('created_at', $now->month)->whereYear('created_at', $now->year)->sum('total_amount'),
+            'completedOrdersCount' => Order::where('status', 'Completed')->count(),
+            'pendingRevenue' => Order::whereIn('status', ['Awaiting Shipping', 'On Delivery'])->sum('total_amount'),
+            
+            // Eager load 'user' and 'user.buyerDetail' to get the full names
+            'recentSales' => Order::where('status', 'Completed')
+                ->with(['user.buyerDetail']) 
+                ->latest()
+                ->take(20)
+                ->get(),
+                
+            'generatedAt' => $now->format('F d, Y h:i A')
+        ];
+
+        $pdf = Pdf::loadView('seller.reports.sales-pdf', $data);
+        
+        return $pdf->setPaper('a4', 'portrait')
+                ->download('CocoHub-Sales-Report-' . $now->format('Y-m-d') . '.pdf');
     }
 }
