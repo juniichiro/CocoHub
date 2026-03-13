@@ -16,7 +16,7 @@
                 </div>
                 <div class="flex gap-4">
                     <a href="{{ route('seller.sales.export') }}" class="px-6 py-3 bg-[#738D56] text-white rounded-2xl text-sm font-bold hover:bg-[#5f7547] transition-all shadow-lg shadow-[#738D56]/20">
-                        Export PDF Report
+                        Export Report
                     </a>
                 </div>
             </div>

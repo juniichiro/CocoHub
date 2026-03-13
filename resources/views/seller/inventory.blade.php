@@ -12,7 +12,6 @@
         editUrl: '',
         photoPreview: null,
         editPhotoPreview: null,
-        // Object to hold data for the product being edited
         currentProduct: { name: '', category: '', price: '', stock: '', description: '', image: '' }
      }">
     
@@ -31,7 +30,9 @@
                         <input type="text" name="search" value="{{ request('search') }}" placeholder="Search Product" 
                                class="px-6 py-3 bg-white border border-gray-100 rounded-2xl text-sm outline-none w-64 focus:ring-2 focus:ring-[#738D56]/20 transition-all">
                     </form>
-                    <button class="px-6 py-3 bg-white border border-gray-100 rounded-2xl text-sm font-bold text-gray-400 hover:bg-gray-50 transition">Export Report</button>
+                    <a href="{{ route('seller.inventory.export') }}" class="px-6 py-3 bg-[#738D56] text-white rounded-2xl text-sm font-bold hover:bg-[#5f7547] transition-all shadow-lg shadow-[#738D56]/20">
+                        Export Report
+                    </a>
                 </div>
             </div>
 

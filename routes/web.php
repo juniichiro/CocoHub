@@ -90,6 +90,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/inventory', 'store')->name('inventory.store');
             Route::patch('/inventory/{product}', 'update')->name('inventory.update');
             Route::delete('/inventory/{product}', 'destroy')->name('inventory.destroy');
+            Route::get('/seller/inventory/export', 'exportPDF')->name('inventory.export');
         });
 
         // Order Management

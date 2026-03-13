@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\RedirectResponse;
@@ -115,5 +117,26 @@ class InventoryController extends Controller
         $product->delete();
 
         return back()->with('status', 'product-deleted');
+    }
+    public function exportPDF()
+    {
+        $products = Product::all();
+        $now = Carbon::now('Asia/Manila');
+
+        $data = [
+            'products' => $products,
+            'generatedAt' => $now->format('F d, Y h:i A'),
+            'stats' => [
+                'total' => $products->count(),
+                'inStock' => $products->where('stock', '>', 10)->count(),
+                'lowStock' => $products->where('stock', '<=', 10)->where('stock', '>', 0)->count(),
+                'outOfStock' => $products->where('stock', '<=', 0)->count(),
+            ]
+        ];
+
+        $pdf = Pdf::loadView('seller.reports.inventory-pdf', $data);
+        
+        return $pdf->setPaper('a4', 'portrait')
+                ->download('CocoHub-Inventory-Report-' . $now->format('Y-m-d') . '.pdf');
     }
 }
