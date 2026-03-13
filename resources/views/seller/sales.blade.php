@@ -8,6 +8,7 @@
 
     <main class="flex-grow ml-64 p-12 flex flex-col">
         <div class="flex-grow">
+            {{-- Header Section --}}
             <div class="flex justify-between items-center mb-10">
                 <div>
                     <p class="text-[#738D56] text-xs font-bold uppercase tracking-widest mb-1">Seller Performance</p>
@@ -22,6 +23,7 @@
                 </div>
             </div>
 
+            {{-- Metric Cards --}}
             <div class="grid grid-cols-4 gap-6 mb-12">
                 <div class="bg-white p-8 rounded-[2rem] border border-gray-50 shadow-sm">
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Sales Today</p>
@@ -48,16 +50,18 @@
                 </div>
             </div>
 
+            {{-- Analysis Section --}}
             <div class="flex justify-between items-end mb-6">
                 <h2 class="text-2xl font-bold text-gray-900">Revenue Analysis</h2>
                 <a href="{{ route('seller.inventory') }}" class="px-8 py-3 bg-[#738D56] text-white font-bold rounded-xl shadow-lg shadow-[#738D56]/20 hover:bg-[#5f7547] transition-all">Manage Inventory</a>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {{-- Hourly Chart --}}
                 <div class="bg-white rounded-[2.5rem] p-10 border border-gray-50 shadow-sm">
                     <div class="mb-8">
                         <h3 class="font-bold text-gray-800 italic">Sold Today</h3>
-                        <p class="text-xs text-gray-400">Hourly revenue distribution.</p>
+                        <p class="text-xs text-gray-400">Hourly revenue distribution (Asia/Manila).</p>
                     </div>
                     
                     <div class="h-64 mb-8">
@@ -70,10 +74,11 @@
                     </div>
                 </div>
 
+                {{-- Monthly Chart --}}
                 <div class="bg-white rounded-[2.5rem] p-10 border border-gray-50 shadow-sm">
                     <div class="mb-8">
                         <h3 class="font-bold text-gray-800 italic">Monthly Performance</h3>
-                        <p class="text-xs text-gray-400">Revenue distribution by month.</p>
+                        <p class="text-xs text-gray-400">Revenue distribution (Last 6 Months).</p>
                     </div>
 
                     <div class="h-64 mb-8">
@@ -95,19 +100,29 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    // Styling constants to match CocoHub theme
     const primaryColor = '#738D56';
     const secondaryColor = 'rgba(115, 141, 86, 0.1)';
 
+    // Helper to format currency in tooltips
+    const currencyFormatter = (value) => '₱' + new Intl.NumberFormat('en-PH').format(value);
+
     // 1. Today's Hourly Chart
+    // We use array_map/array_column because $hourlySales is now a plain array
+    const todayLabels = {!! json_encode(array_map(function($h) {
+        $hour = $h['hour'];
+        return $hour == 0 ? '12 AM' : ($hour > 12 ? ($hour - 12) . ' PM' : ($hour == 12 ? '12 PM' : $hour . ' AM'));
+    }, $hourlySales)) !!};
+    
+    const todayData = {!! json_encode(array_column($hourlySales, 'total')) !!};
+
     const todayCtx = document.getElementById('todaySalesChart').getContext('2d');
     new Chart(todayCtx, {
         type: 'line',
         data: {
-            labels: {!! json_encode($hourlySales->pluck('hour')->map(fn($h) => $h . ':00')) !!},
+            labels: todayLabels,
             datasets: [{
                 label: 'Hourly Sales',
-                data: {!! json_encode($hourlySales->pluck('total')) !!},
+                data: todayData,
                 borderColor: primaryColor,
                 backgroundColor: secondaryColor,
                 fill: true,
@@ -120,23 +135,31 @@
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
+            plugins: { 
+                legend: { display: false },
+                tooltip: {
+                    callbacks: { label: (context) => ` Revenue: ${currencyFormatter(context.raw)}` }
+                }
+            },
             scales: {
-                y: { beginAtZero: true, grid: { display: false }, ticks: { font: { size: 10 } } },
-                x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                y: { beginAtZero: true, grid: { display: false }, ticks: { font: { size: 10 }, callback: (v) => '₱' + v } },
+                x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 0 } }
             }
         }
     });
 
     // 2. Monthly Performance Chart
+    const monthLabels = {!! json_encode($monthlySales->pluck('month')) !!};
+    const monthData = {!! json_encode($monthlySales->pluck('total')) !!};
+
     const monthCtx = document.getElementById('monthlySalesChart').getContext('2d');
     new Chart(monthCtx, {
         type: 'bar',
         data: {
-            labels: {!! json_encode($monthlySales->pluck('month')) !!},
+            labels: monthLabels,
             datasets: [{
                 label: 'Monthly Revenue',
-                data: {!! json_encode($monthlySales->pluck('total')) !!},
+                data: monthData,
                 backgroundColor: primaryColor,
                 borderRadius: 8,
                 barThickness: 25
@@ -145,9 +168,14 @@
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
+            plugins: { 
+                legend: { display: false },
+                tooltip: {
+                    callbacks: { label: (context) => ` Total: ${currencyFormatter(context.raw)}` }
+                }
+            },
             scales: {
-                y: { beginAtZero: true, grid: { display: false }, ticks: { font: { size: 10 } } },
+                y: { beginAtZero: true, grid: { display: false }, ticks: { font: { size: 10 }, callback: (v) => '₱' + v } },
                 x: { grid: { display: false }, ticks: { font: { size: 10 } } }
             }
         }

@@ -6,20 +6,26 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class SalesController extends Controller
 {
     public function index(Request $request)
     {
+        // Set timezone to PH to ensure "Today" means Today in Manila
+        $today = Carbon::today('Asia/Manila');
+        $now = Carbon::now('Asia/Manila');
+
         // 1. Total Sales Today (Only Completed)
+        // Using whereDate with a specific timezone cast
         $totalSalesToday = Order::where('status', 'Completed')
-            ->whereDate('created_at', Carbon::today())
+            ->whereDate('created_at', $today)
             ->sum('total_amount');
 
         // 2. Sales This Month (Only Completed)
         $totalSalesMonth = Order::where('status', 'Completed')
-            ->whereMonth('created_at', Carbon::now()->month)
-            ->whereYear('created_at', Carbon::now()->year)
+            ->whereMonth('created_at', $now->month)
+            ->whereYear('created_at', $now->year)
             ->sum('total_amount');
 
         // 3. Completed Order Count (Lifetime)
@@ -29,7 +35,7 @@ class SalesController extends Controller
         $pendingRevenue = Order::whereIn('status', ['Awaiting Shipping', 'On Delivery'])
             ->sum('total_amount');
 
-        // 5. Recent Completed Transactions with Search Filter
+        // 5. Recent Completed Transactions
         $query = Order::where('status', 'Completed')
             ->with(['user.buyerDetail']);
 
@@ -40,30 +46,49 @@ class SalesController extends Controller
         $recentSales = $query->latest()->take(10)->get();
 
         // 6. Data for Hourly Breakdown (Today)
-        $hourlySales = Order::where('status', 'Completed')
-            ->whereDate('created_at', Carbon::today())
-            ->selectRaw('HOUR(created_at) as hour, SUM(total_amount) as total')
+        // We use DB::raw to handle the HOUR extraction properly across different DB drivers
+        // 6. Data for Hourly Breakdown (Today) - Adjusted for PH Timezone
+        $rawHourlyData = Order::where('status', 'Completed')
+            ->whereDate('created_at', $today)
+            ->select(
+                // CONVERT_TZ shifts the time from UTC (+00:00) to Manila (+08:00)
+                DB::raw('HOUR(CONVERT_TZ(created_at, "+00:00", "+08:00")) as hour'),
+                DB::raw('SUM(total_amount) as total')
+            )
             ->groupBy('hour')
             ->orderBy('hour')
-            ->get();
+            ->pluck('total', 'hour')
+            ->toArray();
+
+        // Fill in missing hours with 0 so the chart shows a full 24h timeline
+        $hourlySales = [];
+        for ($i = 0; $i < 24; $i++) {
+            $hourlySales[] = [
+                'hour' => $i,
+                'total' => $rawHourlyData[$i] ?? 0
+            ];
+        }
 
         // 7. Data for Monthly Performance Chart (Last 6 Months)
-        // We need this for the bar chart in your view
         $monthlySales = Order::where('status', 'Completed')
-            ->selectRaw('SUM(total_amount) as total, MONTHNAME(created_at) as month, MONTH(created_at) as month_num')
-            ->where('created_at', '>=', now()->subMonths(6))
+            ->select(
+                DB::raw('SUM(total_amount) as total'),
+                DB::raw('MONTHNAME(created_at) as month'),
+                DB::raw('MONTH(created_at) as month_num')
+            )
+            ->where('created_at', '>=', $now->copy()->subMonths(6)->startOfMonth())
             ->groupBy('month', 'month_num')
             ->orderBy('month_num')
             ->get();
 
-        return view('seller.sales', compact(
-            'totalSalesToday',
-            'totalSalesMonth',
-            'completedOrdersCount',
-            'pendingRevenue',
-            'recentSales',
-            'hourlySales',
-            'monthlySales' // Make sure this is passed now
-        ));
+        return view('seller.sales', [
+            'totalSalesToday' => $totalSalesToday,
+            'totalSalesMonth' => $totalSalesMonth,
+            'completedOrdersCount' => $completedOrdersCount,
+            'pendingRevenue' => $pendingRevenue,
+            'recentSales' => $recentSales,
+            'hourlySales' => $hourlySales, // Now a guaranteed 24-point array
+            'monthlySales' => $monthlySales
+        ]);
     }
 }
