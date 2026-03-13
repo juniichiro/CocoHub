@@ -3,54 +3,41 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
-        body { font-family: 'DejaVu Sans', sans-serif; color: #333; line-height: 1.4; margin: 0; padding: 0; }
+        /* Base font increased to 12px for better readability */
+        body { font-family: 'DejaVu Sans', sans-serif; color: #333; line-height: 1.5; margin: 0; padding: 0; font-size: 12px; }
         
-        .header { text-align: center; border-bottom: 2px solid #738D56; padding-bottom: 10px; margin-bottom: 20px; }
-        .brand-coco { color: #6D4C41; font-weight: bold; font-size: 24px; }
-        .brand-hub { color: #738D56; font-weight: bold; font-size: 24px; }
+        .header { text-align: center; border-bottom: 2px solid #738D56; padding-bottom: 15px; margin-bottom: 25px; }
+        .brand-coco { color: #6D4C41; font-weight: bold; font-size: 28px; }
+        .brand-hub { color: #738D56; font-weight: bold; font-size: 28px; }
         
-        /* TABLE-BASED STATS ROW: Bulletproof single-row layout */
-        .stats-table { 
-            width: 100%; 
-            margin-bottom: 25px; 
-            border-collapse: separate; 
-            border-spacing: 8px 0; 
-            margin-left: -8px;    
-        }
+        .stats-table { width: 100%; margin-bottom: 30px; border-collapse: separate; border-spacing: 10px 0; margin-left: -10px; }
         
-        .stat-card { 
-            background: #F9F7F2; 
-            padding: 15px 5px; 
-            border-radius: 12px; 
-            text-align: center; 
-            width: 25%;           
-        }
+        .stat-card { background: #F9F7F2; padding: 20px 10px; border-radius: 15px; text-align: center; width: 25%; }
         
-        .stat-label { font-size: 8px; color: #888; text-transform: uppercase; font-weight: bold; margin-bottom: 8px; }
-        
-        /* Updated to be solid black for all values */
-        .stat-value { font-size: 16px; font-weight: bold; color: #202124; }
+        /* Stat labels and values scaled up */
+        .stat-label { font-size: 10px; color: #888; text-transform: uppercase; font-weight: bold; margin-bottom: 10px; }
+        .stat-value { font-size: 20px; font-weight: bold; color: #202124; }
 
-        /* Product Table */
-        table.product-table { width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed; }
-        th { background: #738D56; color: white; padding: 12px 10px; font-size: 10px; text-align: left; text-transform: uppercase; letter-spacing: 0.05em; }
+        table.product-table { width: 100%; border-collapse: collapse; margin-top: 15px; table-layout: fixed; }
+        /* Headers increased to 11px */
+        th { background: #738D56; color: white; padding: 14px 12px; font-size: 11px; text-align: left; text-transform: uppercase; letter-spacing: 0.05em; }
         th.status-header { text-align: center; }
         
-        td { padding: 12px 10px; border-bottom: 1px solid #f0f0f0; font-size: 9px; vertical-align: middle; }
+        /* Table data increased to 11px */
+        td { padding: 14px 12px; border-bottom: 1px solid #f0f0f0; font-size: 11px; vertical-align: middle; }
         
-        /* Row Highlighting for Critical Status */
         .row-out-of-stock { background-color: #FFF5F5; } 
         .text-critical { color: #D93025 !important; }
 
         .badge { 
-            padding: 4px 10px; 
+            padding: 6px 12px; 
             border-radius: 20px; 
-            font-size: 8px; 
+            font-size: 9px; 
             font-weight: bold; 
             text-transform: uppercase; 
             display: inline-block;
             text-align: center;
-            min-width: 85px;
+            min-width: 95px;
         }
         
         .bg-green { background-color: #E6F4EA; color: #1E8E3E; }
@@ -58,20 +45,19 @@
         .bg-red { background-color: #FCE8E6; color: #D93025; } 
         
         .text-right { text-align: right; }
-        .product-name { font-weight: bold; color: #202124; font-size: 10px; }
-        .category-text { color: #9AA0A6; }
+        .product-name { font-weight: bold; color: #202124; font-size: 12px; }
+        .category-text { color: #202124; font-weight: normal; }
 
-        .footer { margin-top: 30px; text-align: center; font-size: 8px; color: #aaa; }
+        .footer { margin-top: 40px; text-align: center; font-size: 10px; color: #aaa; }
     </style>
 </head>
 <body>
     <div class="header">
         <span class="brand-coco">Coco</span><span class="brand-hub">Hub</span>
-        <div style="font-size: 12px; margin-top: 5px;">Inventory Status Report</div>
-        <div style="font-size: 9px; color: #666;">Generated on: {{ $generatedAt }}</div>
+        <div style="font-size: 14px; margin-top: 5px;">Inventory Status Report</div>
+        <div style="font-size: 11px; color: #666;">Generated on: {{ $generatedAt }}</div>
     </div>
 
-    {{-- Single Row Metrics --}}
     <table class="stats-table">
         <tr>
             <td class="stat-card">
@@ -108,24 +94,13 @@
             @php
                 $isOut = $p->stock <= 0;
                 $isLow = $p->stock > 0 && $p->stock <= 10;
-                
-                if($isOut) { 
-                    $status = 'Out of Stock'; 
-                    $badge = 'bg-red'; 
-                    $rowClass = 'row-out-of-stock';
-                } elseif($isLow) { 
-                    $status = 'Low Stock'; 
-                    $badge = 'bg-yellow'; 
-                    $rowClass = '';
-                } else { 
-                    $status = 'In Stock'; 
-                    $badge = 'bg-green'; 
-                    $rowClass = '';
-                }
+                if($isOut) { $status = 'Out of Stock'; $badge = 'bg-red'; $rowClass = 'row-out-of-stock'; }
+                elseif($isLow) { $status = 'Low Stock'; $badge = 'bg-yellow'; $rowClass = ''; }
+                else { $status = 'In Stock'; $badge = 'bg-green'; $rowClass = ''; }
             @endphp
             <tr class="{{ $rowClass }}">
                 <td class="product-name {{ $isOut ? 'text-critical' : '' }}">{{ $p->name }}</td>
-                <td class="category-text">{{ $p->category }}</td>
+                <td class="category-text {{ $isOut ? 'text-critical' : '' }}">{{ $p->category }}</td>
                 <td style="font-weight: bold;" class="{{ $isOut ? 'text-critical' : '' }}">&#8369;{{ number_format($p->price, 2) }}</td>
                 <td style="font-weight: bold;" class="{{ $isOut ? 'text-critical' : '' }}">{{ $p->stock }}</td>
                 <td class="text-right">
@@ -136,8 +111,8 @@
         </tbody>
     </table>
 
-    <div class="footer">
-        CocoHub Marketplace - For Educational Purposes Only. Developed by Lumiere.
+    <div class="footer">        
+        CocoHub - For Educational Purposes Only. Developed by Lumiere.
     </div>
 </body>
 </html>
