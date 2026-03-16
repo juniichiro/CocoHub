@@ -12,7 +12,6 @@ class OrderController extends Controller
     {
         $query = Order::with(['user', 'items.product']);
 
-        // Search by Order ID or Customer Name
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where('id', $search)
@@ -21,7 +20,6 @@ class OrderController extends Controller
                   });
         }
 
-        // Filter by Status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }

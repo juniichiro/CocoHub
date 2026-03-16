@@ -63,20 +63,20 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div>
                             <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 ml-1">First Name</label>
-                            <input type="text" name="first_name" id="first_name" value="{{ old('first_name') }}" required placeholder="Juan"
+                            <input type="text" name="first_name" id="first_name" value="{{ old('first_name') }}" required placeholder="First Name"
                                 onkeyup="updateFullName()"
                                 class="w-full px-4 py-3 bg-[#F3F4F6] border-none rounded-xl focus:ring-2 focus:ring-[#738D56] text-gray-700 placeholder-gray-400 transition-all text-sm @error('first_name') ring-2 ring-red-500 @enderror" />
                             @error('first_name') <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 ml-1">Middle Name</label>
-                            <input type="text" name="middle_name" id="middle_name" value="{{ old('middle_name') }}" placeholder="Don"
+                            <input type="text" name="middle_name" id="middle_name" value="{{ old('middle_name') }}" placeholder="Middle Name"
                                 onkeyup="updateFullName()"
                                 class="w-full px-4 py-3 bg-[#F3F4F6] border-none rounded-xl focus:ring-2 focus:ring-[#738D56] text-gray-700 placeholder-gray-400 transition-all text-sm" />
                         </div>
                         <div>
                             <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 ml-1">Last Name</label>
-                            <input type="text" name="last_name" id="last_name" value="{{ old('last_name') }}" required placeholder="Dela Cruz"
+                            <input type="text" name="last_name" id="last_name" value="{{ old('last_name') }}" required placeholder="Last Name"
                                 onkeyup="updateFullName()"
                                 class="w-full px-4 py-3 bg-[#F3F4F6] border-none rounded-xl focus:ring-2 focus:ring-[#738D56] text-gray-700 placeholder-gray-400 transition-all text-sm @error('last_name') ring-2 ring-red-500 @enderror" />
                             @error('last_name') <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p> @enderror
@@ -86,13 +86,13 @@
                     <div class="grid grid-cols-3 gap-4">
                         <div class="col-span-2">
                             <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 ml-1">Mobile Number</label>
-                            <input type="text" name="phone_number" value="{{ old('phone_number') }}" required placeholder="+63xxx-xxx-xxxx"
+                            <input type="text" name="phone_number" value="{{ old('phone_number') }}" required placeholder="Mobile Number"
                                 class="w-full px-5 py-3 bg-[#F3F4F6] border-none rounded-xl focus:ring-2 focus:ring-[#738D56] text-gray-700 placeholder-gray-400 transition-all text-sm @error('phone_number') ring-2 ring-red-500 @enderror" />
                             @error('phone_number') <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 ml-1">Age</label>
-                            <input type="number" name="age" value="{{ old('age') }}" required placeholder="18"
+                            <input type="number" name="age" value="{{ old('age') }}" required placeholder="Age"
                                 class="w-full px-5 py-3 bg-[#F3F4F6] border-none rounded-xl focus:ring-2 focus:ring-[#738D56] text-gray-700 placeholder-gray-400 transition-all text-sm @error('age') ring-2 ring-red-500 @enderror" />
                             @error('age') <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p> @enderror
                         </div>
@@ -100,14 +100,14 @@
 
                     <div>
                         <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 ml-1">Address</label>
-                        <input type="text" name="address" value="{{ old('address') }}" required placeholder="St., Brgy., City"
+                        <input type="text" name="address" value="{{ old('address') }}" required placeholder="Address"
                             class="w-full px-5 py-3 bg-[#F3F4F6] border-none rounded-xl focus:ring-2 focus:ring-[#738D56] text-gray-700 placeholder-gray-400 transition-all text-sm @error('address') ring-2 ring-red-500 @enderror" />
                         @error('address') <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p> @enderror
                     </div>
 
                     <div>
                         <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 ml-1">Email</label>
-                        <input type="email" name="email" value="{{ old('email') }}" required placeholder="your.email@cocohub.ph"
+                        <input type="email" name="email" value="{{ old('email') }}" required placeholder="Email"
                             class="w-full px-5 py-3 bg-[#F3F4F6] border-none rounded-xl focus:ring-2 focus:ring-[#738D56] text-gray-700 placeholder-gray-400 transition-all text-sm @error('email') ring-2 ring-red-500 @enderror" />
                         @error('email') <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p> @enderror
                     </div>
@@ -115,13 +115,13 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 ml-1">Password</label>
-                            <input type="password" name="password" x-model="password" required placeholder="••••••••"
+                            <input type="password" name="password" x-model="password" required placeholder="Password"
                                 class="w-full px-5 py-3 bg-[#F3F4F6] border-none rounded-xl focus:ring-2 focus:ring-[#738D56] text-gray-700 placeholder-gray-400 transition-all text-sm @error('password') ring-2 ring-red-500 @enderror" />
                             @error('password') <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 ml-1">Confirm Password</label>
-                            <input type="password" name="password_confirmation" x-model="password_confirmation" required placeholder="••••••••"
+                            <input type="password" name="password_confirmation" x-model="password_confirmation" required placeholder="Confirm Password"
                                 class="w-full px-5 py-3 bg-[#F3F4F6] border-none rounded-xl focus:ring-2 focus:ring-[#738D56] text-gray-700 placeholder-gray-400 transition-all text-sm" />
                             
                             <div class="mt-1 ml-1 h-3">

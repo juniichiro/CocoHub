@@ -2,7 +2,6 @@
     <div class="max-w-7xl mx-auto px-8 lg:px-20">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-24">
             
-            {{-- Brand Section --}}
             <div class="space-y-4">
                 <div class="flex items-center gap-1">
                     <span class="text-2xl font-bold text-[#6D4C41]">Coco<span class="text-2xl font-bold text-[#738D56]">Hub</span></span>
@@ -19,7 +18,6 @@
                 </div>
             </div>
 
-            {{-- Shop Section - Aligned with Product Filter Categories --}}
             <div class="space-y-6">
                 <h4 class="text-gray-900 font-bold text-base uppercase tracking-wider">Shop</h4>
                 <ul class="space-y-3">
@@ -51,7 +49,6 @@
                 </ul>
             </div>
 
-            {{-- Contact Section --}}
             <div class="space-y-6">
                 <h4 class="text-gray-900 font-bold text-base uppercase tracking-wider">Contact</h4>
                 <ul class="space-y-3">

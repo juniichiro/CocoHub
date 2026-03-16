@@ -17,7 +17,6 @@ class CheckoutController extends Controller
         $cart = Cart::where('user_id', auth()->id())->with('items.product')->first();
 
         if (!$cart || $cart->items->isEmpty()) {
-            // Redirect back to the cart with a specific status
             return redirect()->route('buyer.cart')->with('status', 'cart-empty');
         }
 
@@ -33,21 +32,18 @@ class CheckoutController extends Controller
 
         $cart = Cart::where('user_id', Auth::id())->with('items.product')->first();
 
-        // Database Transaction to ensure data integrity
         DB::transaction(function () use ($request, $cart) {
             $subtotal = $cart->items->sum(fn($item) => $item->product->price * $item->quantity);
             $total = $subtotal + 80; // Total + Delivery Fee
 
-            // 1. Create the Order
             $order = Order::create([
                 'user_id' => Auth::id(),
                 'total_amount' => $total,
-                'status' => 'Awaiting Shipping', // Default status for seller tracking
+                'status' => 'Awaiting Shipping', 
                 'payment_method' => $request->payment_method,
                 'shipping_address' => $request->shipping_address,
             ]);
 
-            // 2. Move items from Cart to OrderItems & Reduce Product Stock
             foreach ($cart->items as $item) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -56,11 +52,9 @@ class CheckoutController extends Controller
                     'price' => $item->product->price,
                 ]);
 
-                // Reduce stock in products table
                 $item->product->decrement('stock', $item->quantity);
             }
 
-            // 3. Clear the Cart
             $cart->items()->delete();
         });
 

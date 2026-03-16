@@ -1,6 +1,6 @@
 @props([
-    'id',              // The Alpine variable to open/close (e.g., openDeleteModal)
-    'action',          // The Alpine variable holding the URL (e.g., deleteUrl)
+    'id',              
+    'action',          
     'requirePassword' => false
 ])
 

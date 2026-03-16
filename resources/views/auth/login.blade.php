@@ -80,7 +80,7 @@
                     <div>
                         <label for="password" class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-1">Password</label>
                         <input id="password" type="password" name="password" required 
-                            placeholder="••••••••"
+                            placeholder="Password"
                             class="w-full px-5 py-3.5 bg-[#F3F4F6] border-none rounded-2xl focus:ring-2 focus:ring-[#738D56] text-gray-700 placeholder-gray-400 transition-all" />
                         
                         <div class="flex justify-end mt-2">

@@ -89,7 +89,6 @@
                         $selectedProduct = old($productField, $settings->$productField ?? '');
                         $currentBadge = old($badgeField, $settings->$badgeField ?? 'Featured');
                         
-                        // Approved options for the dropdown
                         $badgeOptions = ['Featured', 'Best Seller', 'New Arrival', 'Limited', 'Sale', 'Eco-Friendly'];
                     @endphp
                     <div class="bg-white rounded-[2rem] p-8 shadow-sm border border-gray-50 space-y-4">

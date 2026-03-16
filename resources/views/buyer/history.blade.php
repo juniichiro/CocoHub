@@ -13,7 +13,6 @@
                 <h1 class="text-3xl lg:text-4xl font-bold text-gray-900 mt-3 leading-tight">History<br class="hidden md:block"> Transactions</h1>
             </div>
             
-            {{-- Filter Dropdown aligned to the bottom right on desktop --}}
             <div class="w-full md:w-auto">
                 <select class="w-full md:w-48 bg-white border border-gray-100 rounded-xl px-4 py-3 text-xs font-bold uppercase tracking-widest text-gray-500 shadow-sm focus:ring-[#738D56] focus:border-[#738D56]">
                     <option>All Orders</option>

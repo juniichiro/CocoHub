@@ -7,7 +7,6 @@
     
     @include('layouts.navigation')
 
-    {{-- Fixed Warning Notification (Appears on Redirect) --}}
     @if(session('status') === 'cart-empty')
         <div class="fixed top-24 right-8 z-50 p-4 bg-red-500 text-white text-sm font-bold rounded-2xl shadow-lg shadow-red-500/20 animate-fade-in flex items-center gap-4">
             <div class="flex items-center gap-2">
@@ -31,9 +30,7 @@
             <h1 class="text-4xl font-bold text-gray-900 mt-2">Checkout</h1>
         </header>
 
-        {{-- Conditional View based on Cart Status --}}
         @if($cart->items->isEmpty())
-            {{-- Empty State Content --}}
             <div class="bg-white rounded-[2.5rem] p-16 text-center shadow-sm border border-gray-50 animate-fade-in">
                 <div class="w-20 h-20 bg-[#F9F7F2] rounded-full flex items-center justify-center mx-auto mb-6 text-[#738D56]">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -47,7 +44,6 @@
                 </a>
             </div>
         @else
-            {{-- Checkout Form --}}
             <form action="{{ route('buyer.checkout.process') }}" method="POST" class="flex flex-col lg:flex-row gap-8 items-start">
                 @csrf
                 

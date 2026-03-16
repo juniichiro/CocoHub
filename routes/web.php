@@ -20,9 +20,6 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-/**
- * Role-Based Traffic Controller
- */
 Route::get('/dashboard', function () {
     if (Auth::user()->role_id == 2) { 
         return redirect()->route('buyer.home');
@@ -30,12 +27,9 @@ Route::get('/dashboard', function () {
     return redirect()->route('seller.dashboard'); 
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-/**
- * Authenticated Routes
- */
+
 Route::middleware(['auth', 'verified'])->group(function () {
     
-    // --- 1. Global Profile & Security ---
     Route::controller(ProfileController::class)->group(function () {
         Route::get('/profile', 'edit')->name('profile.edit');
         Route::patch('/profile', 'update')->name('profile.update');
@@ -43,7 +37,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/password-update', 'updatePassword')->name('password.update');
     });
 
-    // --- 2. Buyer Specific Routes ---
     Route::name('buyer.')->group(function () {
         Route::get('/home', [HomeController::class, 'index'])->name('home');
         Route::get('/buyer-profile', [ProfileController::class, 'edit'])->name('profile');
@@ -70,7 +63,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
     });
 
-    // --- 3. Seller Specific Routes ---
     Route::prefix('seller')->name('seller.')->group(function () {
         
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -78,13 +70,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/sales', [SalesController::class, 'index'])->name('sales'); 
         Route::get('/seller/sales/export', [SalesController::class, 'exportPDF'])->name('sales.export');
 
-        // Storefront Management
         Route::controller(StorefrontController::class)->group(function () {
             Route::get('/storefront', 'index')->name('storefront');
             Route::patch('/storefront', 'update')->name('storefront.update');
         });
         
-        // Inventory Management
         Route::controller(InventoryController::class)->group(function () {
             Route::get('/inventory', 'index')->name('inventory');
             Route::post('/inventory', 'store')->name('inventory.store');
@@ -93,16 +83,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/seller/inventory/export', 'exportPDF')->name('inventory.export');
         });
 
-        // Order Management
         Route::controller(OrderController::class)->group(function () {
             Route::get('/orders', 'index')->name('orders');
             Route::patch('/orders/{order}', 'updateStatus')->name('orders.update');
         });
 
-        // 2. NEW: Seller Review Management
         Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews');
 
-        // Client & Profile Management
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
         
         Route::controller(ClientController::class)->group(function () {

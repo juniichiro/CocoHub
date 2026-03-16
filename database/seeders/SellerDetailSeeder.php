@@ -17,9 +17,9 @@ class SellerDetailSeeder extends Seeder
                 ['user_id' => $seller->id],
                 [
                     'first_name'      => 'Tamiyah Gale',
-                    'middle_name'     => 'C.',
+                    'middle_name'     => 'Cederio',
                     'last_name'       => 'Valera',
-                    'age'             => 22,
+                    'age'             => 21,
                     'address'         => 'BGC, Taguig City',
                     'phone_number'    => '0912345678',
                     'profile_picture' => null, 

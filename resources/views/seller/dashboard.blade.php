@@ -20,10 +20,8 @@
                 </div>
             </div>
 
-            {{-- Banner Section with Storefront Logic --}}
             <div class="bg-white rounded-[3rem] p-12 mb-10 flex items-center justify-between border border-gray-50 shadow-sm overflow-hidden relative group">
                 
-                {{-- Dynamic Background Image Overlay --}}
                 @if(isset($settings->main_image))
                     <img src="{{ asset('images/' . $settings->main_image) }}" class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-10 transition-opacity duration-700 pointer-events-none">
                 @endif
@@ -45,7 +43,6 @@
                     </div>
                 </div>
 
-                {{-- Right-side Product/Banner Image --}}
                 <div class="w-1/2 flex justify-end z-10">
                     <div class="relative w-full max-w-md aspect-[4/3] overflow-hidden rounded-[2rem] shadow-2xl">
                         @if(isset($settings->main_image))
@@ -62,7 +59,6 @@
                 </div>
             </div>
 
-            {{-- Metric Cards Section --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                 <div class="bg-white p-8 rounded-[2rem] border border-gray-50 shadow-sm hover:shadow-md transition-shadow">
                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4">Sales Today</p>
@@ -91,7 +87,6 @@
                 </div>
             </div>
 
-            {{-- Lower Grid: Inventory & Recent Orders --}}
             <div class="grid grid-cols-1 xl:grid-cols-5 gap-8">
                 <div class="xl:col-span-3 bg-white rounded-[2.5rem] p-8 border border-gray-50 shadow-sm">
                     <div class="flex justify-between items-center mb-8">

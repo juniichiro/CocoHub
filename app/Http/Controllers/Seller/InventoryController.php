@@ -14,9 +14,6 @@ use Illuminate\Support\Str; // Added for slug generation
 
 class InventoryController extends Controller
 {
-    /**
-     * Display the global inventory.
-     */
     public function index(Request $request): View
     {
         $query = Product::query();
@@ -34,9 +31,6 @@ class InventoryController extends Controller
         return view('seller.inventory', compact('products'));
     }
 
-    /**
-     * Store a new product.
-     */
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -51,7 +45,6 @@ class InventoryController extends Controller
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             
-            // Generate filename: "full_product_name.extension"
             $safeName = str_replace('-', '_', Str::slug($request->name));
             $filename = $safeName . '.' . $file->getClientOriginalExtension();
 
@@ -64,9 +57,6 @@ class InventoryController extends Controller
         return back()->with('status', 'product-added');
     }
 
-    /**
-     * Update an existing product.
-     */
     public function update(Request $request, Product $product): RedirectResponse
     {
         $validated = $request->validate([
@@ -79,7 +69,6 @@ class InventoryController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            // Delete old image file if it exists
             if ($product->image) {
                 $oldPath = public_path('images/products/' . $product->image);
                 if (File::exists($oldPath)) {
@@ -89,7 +78,6 @@ class InventoryController extends Controller
 
             $file = $request->file('image');
             
-            // Re-generate filename based on (potentially new) product name
             $safeName = str_replace('-', '_', Str::slug($request->name));
             $filename = $safeName . '.' . $file->getClientOriginalExtension();
 
@@ -102,9 +90,6 @@ class InventoryController extends Controller
         return back()->with('status', 'product-updated');
     }
 
-    /**
-     * Delete a product and its associated image.
-     */
     public function destroy(Product $product): RedirectResponse
     {
         if ($product->image) {

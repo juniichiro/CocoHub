@@ -13,30 +13,23 @@ class SalesController extends Controller
 {
     public function index(Request $request)
     {
-        // Set timezone to PH to ensure "Today" means Today in Manila
         $today = Carbon::today('Asia/Manila');
         $now = Carbon::now('Asia/Manila');
 
-        // 1. Total Sales Today (Only Completed)
-        // Using whereDate with a specific timezone cast
         $totalSalesToday = Order::where('status', 'Completed')
             ->whereDate('created_at', $today)
             ->sum('total_amount');
 
-        // 2. Sales This Month (Only Completed)
         $totalSalesMonth = Order::where('status', 'Completed')
             ->whereMonth('created_at', $now->month)
             ->whereYear('created_at', $now->year)
             ->sum('total_amount');
 
-        // 3. Completed Order Count (Lifetime)
         $completedOrdersCount = Order::where('status', 'Completed')->count();
 
-        // 4. Pending Revenue (Orders still in fulfillment)
         $pendingRevenue = Order::whereIn('status', ['Awaiting Shipping', 'On Delivery'])
             ->sum('total_amount');
 
-        // 5. Recent Completed Transactions
         $query = Order::where('status', 'Completed')
             ->with(['user.buyerDetail']);
 
@@ -46,13 +39,9 @@ class SalesController extends Controller
 
         $recentSales = $query->latest()->take(10)->get();
 
-        // 6. Data for Hourly Breakdown (Today)
-        // We use DB::raw to handle the HOUR extraction properly across different DB drivers
-        // 6. Data for Hourly Breakdown (Today) - Adjusted for PH Timezone
         $rawHourlyData = Order::where('status', 'Completed')
             ->whereDate('created_at', $today)
             ->select(
-                // CONVERT_TZ shifts the time from UTC (+00:00) to Manila (+08:00)
                 DB::raw('HOUR(CONVERT_TZ(created_at, "+00:00", "+08:00")) as hour'),
                 DB::raw('SUM(total_amount) as total')
             )
@@ -61,7 +50,6 @@ class SalesController extends Controller
             ->pluck('total', 'hour')
             ->toArray();
 
-        // Fill in missing hours with 0 so the chart shows a full 24h timeline
         $hourlySales = [];
         for ($i = 0; $i < 24; $i++) {
             $hourlySales[] = [
@@ -70,7 +58,6 @@ class SalesController extends Controller
             ];
         }
 
-        // 7. Data for Monthly Performance Chart (Last 6 Months)
         $monthlySales = Order::where('status', 'Completed')
             ->select(
                 DB::raw('SUM(total_amount) as total'),
@@ -88,7 +75,7 @@ class SalesController extends Controller
             'completedOrdersCount' => $completedOrdersCount,
             'pendingRevenue' => $pendingRevenue,
             'recentSales' => $recentSales,
-            'hourlySales' => $hourlySales, // Now a guaranteed 24-point array
+            'hourlySales' => $hourlySales, 
             'monthlySales' => $monthlySales
         ]);
     }
@@ -98,14 +85,12 @@ class SalesController extends Controller
         $today = Carbon::today('Asia/Manila');
         $now = Carbon::now('Asia/Manila');
 
-        // Fetch data with relationships to get the real names
         $data = [
             'totalSalesToday' => Order::where('status', 'Completed')->whereDate('created_at', $today)->sum('total_amount'),
             'totalSalesMonth' => Order::where('status', 'Completed')->whereMonth('created_at', $now->month)->whereYear('created_at', $now->year)->sum('total_amount'),
             'completedOrdersCount' => Order::where('status', 'Completed')->count(),
             'pendingRevenue' => Order::whereIn('status', ['Awaiting Shipping', 'On Delivery'])->sum('total_amount'),
             
-            // Eager load 'user' and 'user.buyerDetail' to get the full names
             'recentSales' => Order::where('status', 'Completed')
                 ->with(['user.buyerDetail']) 
                 ->latest()

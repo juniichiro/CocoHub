@@ -26,7 +26,6 @@
         
         <div class="flex flex-col lg:flex-row gap-8 lg:gap-10 items-start">
             
-            {{-- Order Summary Section --}}
             <div class="w-full lg:w-2/3 bg-white rounded-[2rem] lg:rounded-[2.5rem] p-5 lg:p-8 shadow-sm border border-gray-50">
                 <h2 class="text-xl font-bold text-gray-800 mb-6 lg:mb-8">Items in Cart</h2>
                 
@@ -39,17 +38,14 @@
                             $subtotal += $itemTotal;
                         @endphp
                         
-                        {{-- Product Card: Mobile Flex / Desktop Grid (12-cols) --}}
                         <div class="flex flex-col sm:grid sm:grid-cols-12 items-start sm:items-center gap-4 lg:gap-6 pb-6 lg:pb-8 border-b border-gray-100 last:border-0 last:pb-0">
                             
-                            {{-- Image: 3/12 columns on desktop --}}
                             <div class="w-full sm:col-span-3 h-44 sm:h-28 shrink-0 rounded-2xl overflow-hidden shadow-sm bg-gray-50">
                                 <img src="{{ asset('images/products/' . ($item->product->image ?? 'placeholder.png')) }}" 
                                      alt="{{ $item->product->name }}" 
                                      class="w-full h-full object-cover">
                             </div>
                             
-                            {{-- Details: 6/12 columns on desktop --}}
                             <div class="flex-grow w-full sm:col-span-6 space-y-1">
                                 <h3 class="text-lg font-bold text-gray-800">{{ $item->product->name }}</h3>
                                 <p class="text-sm text-gray-400 font-medium line-clamp-2 sm:line-clamp-1 mb-3">
@@ -57,7 +53,6 @@
                                 </p>
                                 
                                 <div class="flex items-center gap-4">
-                                    {{-- Quantity Controls --}}
                                     <div class="inline-flex items-center bg-[#F9F7F2] rounded-full px-2 py-1 border border-gray-100 shadow-inner">
                                         <form action="{{ route('buyer.cart.remove', $item->id) }}" method="POST">
                                             @csrf @method('DELETE')
@@ -80,7 +75,6 @@
                                 </div>
                             </div>
                             
-                            {{-- Price: 3/12 columns on desktop (aligned right) --}}
                             <div class="w-full sm:col-span-3 flex sm:flex-col justify-between sm:justify-center items-center sm:items-end gap-1">
                                 <span class="text-xl font-black text-gray-800">₱{{ number_format($itemTotal, 2) }}</span>
                                 <p class="text-[10px] text-gray-400 font-bold uppercase tracking-tighter">₱{{ number_format($item->product->price, 2) }} EA</p>
@@ -100,7 +94,6 @@
                 </div>
             </div>
 
-            {{-- Order Totals Sticky Sidebar --}}
             <div class="w-full lg:w-1/3 space-y-4 lg:sticky lg:top-28">
                 <div class="bg-white rounded-[2rem] lg:rounded-[2.5rem] p-6 lg:p-8 shadow-sm border border-gray-50">
                     <h2 class="text-xl font-bold text-gray-800 mb-6 lg:mb-8">Order Totals</h2>

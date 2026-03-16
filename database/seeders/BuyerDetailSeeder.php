@@ -19,7 +19,7 @@ class BuyerDetailSeeder extends Seeder
                     'first_name'   => 'Raniel John',
                     'middle_name'  => 'Taqueban',
                     'last_name'    => 'Britos',
-                    'age'          => 22,
+                    'age'          => 21,
                     'address'      => 'Dona Aurora Quezon City',
                     'phone_number' => '0912345678',
                     'profile_picture' => null,

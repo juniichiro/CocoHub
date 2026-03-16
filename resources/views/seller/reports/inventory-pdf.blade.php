@@ -3,7 +3,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style>
-        /* Base font increased to 12px for better readability */
         body { font-family: 'DejaVu Sans', sans-serif; color: #333; line-height: 1.5; margin: 0; padding: 0; font-size: 12px; }
         
         .header { text-align: center; border-bottom: 2px solid #738D56; padding-bottom: 15px; margin-bottom: 25px; }
@@ -14,16 +13,13 @@
         
         .stat-card { background: #F9F7F2; padding: 20px 10px; border-radius: 15px; text-align: center; width: 25%; }
         
-        /* Stat labels and values scaled up */
         .stat-label { font-size: 10px; color: #888; text-transform: uppercase; font-weight: bold; margin-bottom: 10px; }
         .stat-value { font-size: 20px; font-weight: bold; color: #202124; }
 
         table.product-table { width: 100%; border-collapse: collapse; margin-top: 15px; table-layout: fixed; }
-        /* Headers increased to 11px */
         th { background: #738D56; color: white; padding: 14px 12px; font-size: 11px; text-align: left; text-transform: uppercase; letter-spacing: 0.05em; }
         th.status-header { text-align: center; }
         
-        /* Table data increased to 11px */
         td { padding: 14px 12px; border-bottom: 1px solid #f0f0f0; font-size: 11px; vertical-align: middle; }
         
         .row-out-of-stock { background-color: #FFF5F5; } 

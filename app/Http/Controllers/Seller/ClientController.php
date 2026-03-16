@@ -8,14 +8,11 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    /**
-     * Display a listing of the buyers with universal search.
-     */
+
     public function index(Request $request)
     {
         $query = User::where('role_id', 2)->with('buyerDetail');
 
-        // Universal Search Logic
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -25,20 +22,16 @@ class ClientController extends Controller
                   ->orWhereHas('buyerDetail', function($sq) use ($search) {
                       $sq->where('first_name', 'LIKE', "%$search%")
                         ->orWhere('last_name', 'LIKE', "%$search%")
-                        ->orWhere('address', 'LIKE', "%$search%"); // Address/City search integrated here
+                        ->orWhere('address', 'LIKE', "%$search%"); 
                   });
             });
         }
 
         $clients = $query->get();
 
-        // Removed the $cities mapping logic to keep the controller lean
         return view('seller.clients', compact('clients'));
     }
 
-    /**
-     * Remove the specified buyer from storage.
-     */
     public function destroy(User $user)
     {
         if ($user->role_id == 2) {

@@ -7,7 +7,6 @@
     
     @include('layouts.navigation')
 
-    {{-- Success Notification --}}
     @if(session('status') === 'added-to-cart')
         <div class="fixed top-24 right-8 z-50 p-4 bg-[#738D56] text-white text-sm font-bold rounded-2xl shadow-lg shadow-[#738D56]/20 animate-fade-in-up flex items-center gap-4">
             <div class="flex items-center gap-2">
@@ -84,7 +83,6 @@
                     @endphp
                     <div class="bg-[#F9F7F2]/50 rounded-[2.5rem] p-4 transition-all duration-300 hover:bg-white hover:shadow-xl hover:shadow-gray-200/50 group flex flex-col h-full">
                         
-                        {{-- Interactive Image Link --}}
                         <a href="{{ route('buyer.product.show', $product->id) }}" class="relative aspect-square rounded-[2rem] overflow-hidden mb-6 bg-gray-50 block">
                             <span class="absolute top-4 left-4 z-10 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold text-gray-700 uppercase tracking-tight">
                                 {{ $badgeText }}
@@ -95,7 +93,6 @@
                         </a>
                         
                         <div class="px-2 space-y-3 flex-grow flex flex-col">
-                            {{-- Interactive Title Link --}}
                             <a href="{{ route('buyer.product.show', $product->id) }}" class="block">
                                 <h3 class="text-lg font-bold text-gray-800 leading-tight group-hover:text-[#738D56] transition-colors min-h-[3rem]">
                                     {{ $product->name }}
@@ -125,7 +122,6 @@
         </div>
     </section>
 
-    {{-- About section --}}
     <section class="px-8 lg:px-20 py-24 bg-[#F9F7F2]">
         <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
             <div class="w-full lg:w-1/2 space-y-6">
