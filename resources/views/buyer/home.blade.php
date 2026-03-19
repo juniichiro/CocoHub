@@ -55,7 +55,7 @@
                 <div class="absolute -top-4 -right-4 w-full h-full border-2 border-[#738D56]/20 rounded-[3rem] -z-10 transition-transform group-hover:translate-x-2 group-hover:-translate-y-2"></div>
                 <div class="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white">
                     @if(!empty($settings->main_image))
-                        <img src="{{ asset('images/storefront/' . $settings->main_image) }}" alt="Hero Banner" class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110">
+                        <img src="{{ asset('images/' . $settings->main_image) }}" alt="Hero Banner" class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110">
                     @else
                         <img src="{{ asset('images/hero.jpg') }}" alt="Default Hero" class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110">
                     @endif
