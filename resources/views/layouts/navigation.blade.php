@@ -18,6 +18,11 @@
                 <x-nav-link :href="route('buyer.home')" :active="request()->routeIs('buyer.home')" class="text-sm font-bold">
                     {{ __('Home') }}
                 </x-nav-link>
+
+                <x-nav-link :href="route('buyer.about')" :active="request()->routeIs('buyer.about')" class="text-sm font-bold">
+                    {{ __('About') }}
+                </x-nav-link>
+
                 <x-nav-link :href="route('buyer.product')" :active="request()->routeIs('buyer.product')" class="text-sm font-bold">
                     {{ __('Products') }}
                 </x-nav-link>
@@ -73,6 +78,10 @@
                 {{ __('Home') }}
             </x-responsive-nav-link>
             
+            <x-responsive-nav-link :href="route('buyer.about')" :active="request()->routeIs('buyer.about')" class="font-bold">
+                {{ __('About') }}
+            </x-responsive-nav-link>
+
             <x-responsive-nav-link :href="route('buyer.product')" :active="request()->routeIs('buyer.product')" class="font-bold">
                 {{ __('Products') }}
             </x-responsive-nav-link>
