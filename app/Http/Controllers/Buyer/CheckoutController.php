@@ -9,12 +9,15 @@ use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class CheckoutController extends Controller
 {
     public function index()
     {
-        $cart = Cart::where('user_id', auth()->id())->with('items.product')->first();
+        $cart = Cart::where('user_id', Auth::id())
+            ->with(['items.product:id,name,price,image,stock'])
+            ->first();
 
         if (!$cart || $cart->items->isEmpty()) {
             return redirect()->route('buyer.cart')->with('status', 'cart-empty');
@@ -32,9 +35,13 @@ class CheckoutController extends Controller
 
         $cart = Cart::where('user_id', Auth::id())->with('items.product')->first();
 
+        if (!$cart || $cart->items->isEmpty()) {
+            return redirect()->route('buyer.cart');
+        }
+
         DB::transaction(function () use ($request, $cart) {
             $subtotal = $cart->items->sum(fn($item) => $item->product->price * $item->quantity);
-            $total = $subtotal + 80; // Total + Delivery Fee
+            $total = $subtotal + 80;
 
             $order = Order::create([
                 'user_id' => Auth::id(),
@@ -53,9 +60,13 @@ class CheckoutController extends Controller
                 ]);
 
                 $item->product->decrement('stock', $item->quantity);
+                
+                Cache::forget("product_detail_{$item->product_id}");
             }
 
             $cart->items()->delete();
+            
+            Cache::flush();
         });
 
         return redirect()->route('buyer.history')->with('status', 'Order placed successfully!');

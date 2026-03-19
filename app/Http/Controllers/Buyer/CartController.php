@@ -14,11 +14,14 @@ class CartController extends Controller
     public function index()
     {
         $cart = Cart::where('user_id', Auth::id())
-            ->with(['items.product'])
+            ->with(['items' => function($query) {
+                $query->with(['product:id,name,price,image,stock']); 
+            }])
             ->first();
 
         return view('buyer.cart', compact('cart'));
     }
+
     public function add(Request $request, Product $product)
     {
         if ($product->stock <= 0) {
@@ -30,7 +33,11 @@ class CartController extends Controller
         $cartItem = $cart->items()->where('product_id', $product->id)->first();
 
         if ($cartItem) {
-            $cartItem->increment('quantity');
+            if ($cartItem->quantity < $product->stock) {
+                $cartItem->increment('quantity');
+            } else {
+                return back()->with('error', 'Cannot add more than available stock.');
+            }
         } else {
             $cart->items()->create([
                 'product_id' => $product->id,
@@ -40,7 +47,6 @@ class CartController extends Controller
 
         return back()->with('status', 'added-to-cart');
     }
-
 
     public function remove(Request $request, $itemId)
     {
@@ -61,7 +67,6 @@ class CartController extends Controller
         return back()->with('status', $status);
     }
 
- 
     public function clear()
     {
         $cart = Cart::where('user_id', Auth::id())->first();

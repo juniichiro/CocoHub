@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Buyer;
 use App\Http\Controllers\Controller;
 use App\Models\StorefrontSetting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache; // Add this
+use Illuminate\Support\Facades\Cache; 
 
 class HomeController extends Controller
 {

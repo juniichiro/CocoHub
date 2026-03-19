@@ -8,24 +8,28 @@ use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class HistoryController extends Controller
 {
-    
     public function index(Request $request)
     {
-        $query = Order::where('user_id', Auth::id())
-                      ->with(['items.product', 'review']); 
+        $cacheKey = 'user_history_' . Auth::id() . '_' . md5(json_encode($request->all()));
 
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
+        $orders = Cache::remember($cacheKey, 3600, function () use ($request) {
+            $query = Order::where('user_id', Auth::id())
+                ->with(['items.product:id,name,image', 'review']);
 
-        if ($request->filled('search')) {
-            $query->where('id', 'LIKE', '%' . $request->search . '%');
-        }
+            if ($request->filled('status')) {
+                $query->where('status', $request->status);
+            }
 
-        $orders = $query->latest()->get();
+            if ($request->filled('search')) {
+                $query->where('id', 'LIKE', '%' . $request->search . '%');
+            }
+
+            return $query->latest()->get();
+        });
 
         $orders->each(function ($order) {
             $order->is_rated = $order->review !== null;
@@ -43,18 +47,16 @@ class HistoryController extends Controller
         ]);
 
         $order = Order::where('id', $request->order_id)
-                      ->where('user_id', Auth::id())
-                      ->where('status', 'Completed')
-                      ->with('items.product') 
-                      ->firstOrFail();
+            ->where('user_id', Auth::id())
+            ->where('status', 'Completed')
+            ->with('items.product')
+            ->firstOrFail();
 
         if ($order->review()->exists()) {
             return back()->with('error', 'You have already rated this order.');
         }
 
         DB::transaction(function () use ($request, $order) {
-            
-            
             foreach ($order->items as $item) {
                 $product = $item->product;
 
@@ -69,14 +71,18 @@ class HistoryController extends Controller
                 $oldCount = $product->review_count;
                 $oldRating = $product->rating;
                 $newCount = $oldCount + 1;
-                
                 $newRating = (($oldRating * $oldCount) + $request->rating) / $newCount;
 
                 $product->update([
                     'rating'       => $newRating,
                     'review_count' => $newCount
                 ]);
+
+                Cache::forget("product_detail_{$product->id}");
             }
+
+            Cache::forget('user_history_' . Auth::id());
+            Cache::flush();
         });
 
         return back()->with('status', 'Thank you for your feedback! Your rating helps other buyers.');

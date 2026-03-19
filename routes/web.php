@@ -7,7 +7,7 @@ use App\Http\Controllers\Seller\OrderController;
 use App\Http\Controllers\Seller\SalesController;
 use App\Http\Controllers\Seller\DashboardController;
 use App\Http\Controllers\Seller\StorefrontController;
-use App\Http\Controllers\Seller\ReviewController; // 1. Added Seller Review Controller
+use App\Http\Controllers\Seller\ReviewController; 
 use App\Http\Controllers\Buyer\HomeController; 
 use App\Http\Controllers\Buyer\ProductController;
 use App\Http\Controllers\Buyer\CartController;
@@ -16,8 +16,14 @@ use App\Http\Controllers\Buyer\HistoryController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('/', function () {
-    return view('auth.login');
+
+Route::get('/', [HomeController::class, 'index'])->name('buyer.home');
+
+Route::name('buyer.')->group(function () {
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('/products', 'index')->name('product');
+        Route::get('/products/{product}', 'show')->name('product.show');
+    });
 });
 
 Route::get('/dashboard', function () {
@@ -38,17 +44,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::name('buyer.')->group(function () {
-        Route::get('/home', [HomeController::class, 'index'])->name('home');
         Route::get('/buyer-profile', [ProfileController::class, 'edit'])->name('profile');
         
         Route::controller(HistoryController::class)->group(function () {
             Route::get('/history', 'index')->name('history');
             Route::post('/history/review', 'storeReview')->name('reviews.store');
-        });
-        
-        Route::controller(ProductController::class)->group(function () {
-            Route::get('/products', 'index')->name('product');
-            Route::get('/products/{product}', 'show')->name('product.show');
         });
 
         Route::controller(CartController::class)->group(function () {
@@ -64,9 +64,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::prefix('seller')->name('seller.')->group(function () {
-        
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
         Route::get('/sales', [SalesController::class, 'index'])->name('sales'); 
         Route::get('/seller/sales/export', [SalesController::class, 'exportPDF'])->name('sales.export');
 
@@ -89,7 +87,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         });
 
         Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews');
-
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
         
         Route::controller(ClientController::class)->group(function () {
