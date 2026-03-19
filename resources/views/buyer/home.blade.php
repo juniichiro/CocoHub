@@ -7,7 +7,7 @@
     
     @include('layouts.navigation')
 
-    @if(session('status') === 'added-to-cart')
+    @if(session('status') === 'Added to Cart')
         <div class="fixed top-24 right-8 z-50 p-4 bg-[#738D56] text-white text-sm font-bold rounded-2xl shadow-lg shadow-[#738D56]/20 animate-fade-in-up flex items-center gap-4">
             <div class="flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -50,7 +50,7 @@
                 <div class="absolute -top-4 -right-4 w-full h-full border-2 border-[#738D56]/20 rounded-[3rem] -z-10 transition-transform group-hover:translate-x-2 group-hover:-translate-y-2"></div>
                 <div class="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white">
                     @if(isset($settings->main_image))
-                        <img src="{{ asset('images/' . $settings->main_image) }}" alt="Hero Banner" class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110">
+                        <img src="{{ asset('images/storefront/' . $settings->main_image) }}" alt="Hero Banner" class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110">
                     @else
                         <img src="{{ asset('images/hero.jpg') }}" alt="Default Hero" class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110">
                     @endif
@@ -103,18 +103,33 @@
                                 <span class="text-2xl font-bold text-[#738D56]">₱{{ number_format($product->price, 2) }}</span>
                             </div>
                             
-                            <form action="{{ route('buyer.cart.add', $product->id) }}" method="POST" id="add-to-home-{{ $product->id }}" class="mt-auto pt-4">
-                                @csrf
-                                <button type="submit" 
-                                    {{ $product->stock <= 0 ? 'disabled' : '' }}
-                                    class="w-full py-4 {{ $product->stock <= 0 ? 'bg-gray-200 cursor-not-allowed' : 'bg-[#6D4C41] hover:bg-[#5a3e35]' }} text-white font-bold rounded-2xl transition-all duration-300 shadow-md shadow-[#6D4C41]/10 transform active:scale-95 flex items-center justify-center gap-2">
-                                    @if($product->stock <= 0)
-                                        <span>Out of Stock</span>
-                                    @else
-                                        <span>Add to Cart</span>
-                                    @endif
-                                </button>
-                            </form>
+                            <div class="mt-auto pt-4">
+                                @auth
+                                    {{-- Logged in: Submit the form --}}
+                                    <form action="{{ route('buyer.cart.add', $product->id) }}" method="POST" id="add-to-home-{{ $product->id }}">
+                                        @csrf
+                                        <button type="submit" 
+                                            {{ $product->stock <= 0 ? 'disabled' : '' }}
+                                            class="w-full py-4 {{ $product->stock <= 0 ? 'bg-gray-200 cursor-not-allowed' : 'bg-[#6D4C41] hover:bg-[#5a3e35]' }} text-white font-bold rounded-2xl transition-all duration-300 shadow-md shadow-[#6D4C41]/10 transform active:scale-95 flex items-center justify-center gap-2">
+                                            @if($product->stock <= 0)
+                                                <span>Out of Stock</span>
+                                            @else
+                                                <span>Add to Cart</span>
+                                            @endif
+                                        </button>
+                                    </form>
+                                @else
+                                    {{-- Guest: Redirect to login --}}
+                                    <a href="{{ route('login') }}" 
+                                       class="w-full py-4 {{ $product->stock <= 0 ? 'bg-gray-200 cursor-not-allowed' : 'bg-[#6D4C41] hover:bg-[#5a3e35]' }} text-white font-bold rounded-2xl transition-all duration-300 shadow-md shadow-[#6D4C41]/10 text-center flex items-center justify-center gap-2">
+                                        @if($product->stock <= 0)
+                                            <span>Out of Stock</span>
+                                        @else
+                                            <span>Add to Cart</span>
+                                        @endif
+                                    </a>
+                                @endauth
+                            </div>
                         </div>
                     </div>
                 @endif
