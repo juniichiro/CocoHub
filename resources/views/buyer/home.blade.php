@@ -54,9 +54,8 @@
             <div class="relative w-full max-w-xl group">
                 <div class="absolute -top-4 -right-4 w-full h-full border-2 border-[#738D56]/20 rounded-[3rem] -z-10 transition-transform group-hover:translate-x-2 group-hover:-translate-y-2"></div>
                 <div class="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white">
-                    {{-- Banner Path Fix --}}
                     @if(!empty($settings->main_image))
-                        <img src="{{ asset('images/' . $settings->main_image) }}" alt="Hero Banner" class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110">
+                        <img src="{{ asset('images/storefront/' . $settings->main_image) }}" alt="Hero Banner" class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110">
                     @else
                         <img src="{{ asset('images/hero.jpg') }}" alt="Default Hero" class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110">
                     @endif
@@ -141,6 +140,40 @@
         </div>
     </section>
 
+    {{-- Restored About Section --}}
+    <section class="px-8 lg:px-20 py-24 bg-[#F9F7F2]">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+            <div class="w-full lg:w-1/2 space-y-6">
+                <span class="text-[#738D56] text-xs font-bold uppercase tracking-widest">About</span>
+                <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                    Crafted from coconut fiber, <br> shaped with care.
+                </h2>
+                <p class="text-gray-600 text-lg leading-relaxed max-w-lg font-medium">
+                    CocoHub brings together sustainability and craftsmanship through a soft, earthy shopping experience. The visual direction is inspired by coconut coir textures, handmade warmth, and clean modern e-commerce design.
+                </p>
+            </div>
+
+            <div class="w-full lg:w-1/2">
+                <div class="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-sm">
+                    <img src="{{ asset('images/about.png') }}" alt="Sustainability" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
     <x-buyer-footer />
 </div>
+
+<style>
+    @keyframes fade-in-up {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in-up {
+        animation: fade-in-up 0.8s ease-out forwards;
+    }
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
 @endsection

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Buyer\AboutController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Seller\ClientController;
 use App\Http\Controllers\Seller\InventoryController;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('buyer.home');
+Route::get('/about', [AboutController::class, 'index'])->name('buyer.about');
 
 Route::name('buyer.')->group(function () {
     Route::controller(ProductController::class)->group(function () {
