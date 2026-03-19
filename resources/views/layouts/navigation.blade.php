@@ -1,45 +1,44 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100 sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20">
-        <div class="flex justify-between h-20">
-            <div class="flex items-center gap-12">
-                <div class="shrink-0 flex items-center gap-3">
-                    <a href="{{ route('buyer.home') }}" class="flex items-center gap-3 group">
-                        <img src="{{ asset('images/coco-hub.png') }}" alt="CocoHub Logo" class="h-10 w-10 object-contain transition-transform group-hover:scale-105">
-                        <div class="flex flex-col">
-                            <h1 class="text-xl font-extrabold leading-none tracking-tight">
-                                <span class="text-[#6D4C41]">Coco</span><span class="text-[#738D56]">Hub</span>
-                            </h1>
-                            <span class="text-[10px] text-gray-400 uppercase tracking-widest font-bold mt-0.5">Lumiere</span>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('buyer.home')" :active="request()->routeIs('buyer.home')" class="text-sm font-bold">
-                        {{ __('Home') }}
-                    </x-nav-link>
-                    <x-nav-link :href="route('buyer.product')" :active="request()->routeIs('buyer.product')" class="text-sm font-bold">
-                        {{ __('Products') }}
-                    </x-nav-link>
-                    
-                    @auth
-                        <x-nav-link :href="route('buyer.cart')" :active="request()->routeIs('buyer.cart')" class="text-sm font-bold">
-                            {{ __('Cart') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('buyer.checkout')" :active="request()->routeIs('buyer.checkout')" class="text-sm font-bold">
-                            {{ __('Checkout') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('buyer.history')" :active="request()->routeIs('buyer.history')" class="text-sm font-bold">
-                            {{ __('History') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.*') || request()->routeIs('buyer.profile')" class="text-sm font-bold">
-                            {{ __('Profile') }}
-                        </x-nav-link>
-                    @endauth
-                </div>
+        <div class="flex items-center justify-between h-20">
+            
+            <div class="flex items-center flex-1">
+                <a href="{{ route('buyer.home') }}" class="flex items-center gap-3 group">
+                    <img src="{{ asset('images/coco-hub.png') }}" alt="CocoHub Logo" class="h-10 w-10 object-contain transition-transform group-hover:scale-105">
+                    <div class="hidden md:flex flex-col">
+                        <h1 class="text-xl font-extrabold leading-none tracking-tight">
+                            <span class="text-[#6D4C41]">Coco</span><span class="text-[#738D56]">Hub</span>
+                        </h1>
+                        <span class="text-[10px] text-gray-400 uppercase tracking-widest font-bold mt-0.5">Lumiere</span>
+                    </div>
+                </a>
             </div>
 
-            <div class="hidden sm:flex sm:items-center sm:ml-6">
+            <div class="hidden sm:flex items-center justify-center space-x-8">
+                <x-nav-link :href="route('buyer.home')" :active="request()->routeIs('buyer.home')" class="text-sm font-bold">
+                    {{ __('Home') }}
+                </x-nav-link>
+                <x-nav-link :href="route('buyer.product')" :active="request()->routeIs('buyer.product')" class="text-sm font-bold">
+                    {{ __('Products') }}
+                </x-nav-link>
+
+                @auth
+                    <x-nav-link :href="route('buyer.cart')" :active="request()->routeIs('buyer.cart')" class="text-sm font-bold">
+                        {{ __('Cart') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('buyer.checkout')" :active="request()->routeIs('buyer.checkout')" class="text-sm font-bold">
+                        {{ __('Checkout') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('buyer.history')" :active="request()->routeIs('buyer.history')" class="text-sm font-bold">
+                        {{ __('History') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.*') || request()->routeIs('buyer.profile')" class="text-sm font-bold">
+                        {{ __('Profile') }}
+                    </x-nav-link>
+                @endauth
+            </div>
+
+            <div class="hidden sm:flex items-center justify-end flex-1">
                 @auth
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
@@ -51,7 +50,7 @@
                         </button>
                     </form>
                 @else
-                    <a href="{{ route('login') }}" class="flex items-center gap-2 px-6 py-2 bg-[#738D56] text-white rounded-xl hover:bg-[#5f7547] transition duration-300 text-sm font-bold shadow-md shadow-[#738D56]/20">
+                    <a href="{{ route('login') }}" class="flex items-center gap-2 px-8 py-2.5 bg-[#738D56] text-white rounded-2xl hover:bg-[#5f7547] transition duration-300 text-sm font-bold shadow-lg shadow-[#738D56]/20">
                         Login
                     </a>
                 @endauth
