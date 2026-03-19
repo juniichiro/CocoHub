@@ -27,12 +27,17 @@
                 </span>
             </div>
             
-            <h1 class="text-5xl lg:text-7xl font-bold text-gray-900 leading-[1.1] max-w-lg">
-                {{ $settings->banner_title ?? 'Sustainable Coconut Coir Products for Everyday Use' }}
+            <h1 class="text-5xl lg:text-7xl font-bold text-gray-900 leading-tight max-w-lg">
+                @if(isset($settings->banner_title))
+                    {!! nl2br(e($settings->banner_title)) !!}
+                @else
+                    Natural coconut <br> coir products for a <br> greener everyday <br> 
+                    <span class="inline-block mt-4">life.</span>
+                @endif
             </h1>
 
             <p class="text-gray-500 text-lg max-w-md leading-relaxed font-medium">
-                {{ $settings->short_description ?? 'Browse curated coconut coir products for gardening, home, and construction.' }}
+                {{ $settings->short_description ?? 'Browse curated coconut coir products for gardening, home, and sustainable living.' }}
             </p>
 
             <div class="flex items-center gap-4 pt-4">
@@ -49,7 +54,8 @@
             <div class="relative w-full max-w-xl group">
                 <div class="absolute -top-4 -right-4 w-full h-full border-2 border-[#738D56]/20 rounded-[3rem] -z-10 transition-transform group-hover:translate-x-2 group-hover:-translate-y-2"></div>
                 <div class="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white">
-                    @if(isset($settings->main_image))
+                    {{-- Banner Path Fix --}}
+                    @if(!empty($settings->main_image))
                         <img src="{{ asset('images/storefront/' . $settings->main_image) }}" alt="Hero Banner" class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110">
                     @else
                         <img src="{{ asset('images/hero.jpg') }}" alt="Default Hero" class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110">
@@ -105,7 +111,6 @@
                             
                             <div class="mt-auto pt-4">
                                 @auth
-                                    {{-- Logged in: Submit the form --}}
                                     <form action="{{ route('buyer.cart.add', $product->id) }}" method="POST" id="add-to-home-{{ $product->id }}">
                                         @csrf
                                         <button type="submit" 
@@ -119,7 +124,6 @@
                                         </button>
                                     </form>
                                 @else
-                                    {{-- Guest: Redirect to login --}}
                                     <a href="{{ route('login') }}" 
                                        class="w-full py-4 {{ $product->stock <= 0 ? 'bg-gray-200 cursor-not-allowed' : 'bg-[#6D4C41] hover:bg-[#5a3e35]' }} text-white font-bold rounded-2xl transition-all duration-300 shadow-md shadow-[#6D4C41]/10 text-center flex items-center justify-center gap-2">
                                         @if($product->stock <= 0)
@@ -137,39 +141,6 @@
         </div>
     </section>
 
-    <section class="px-8 lg:px-20 py-24 bg-[#F9F7F2]">
-        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16">
-            <div class="w-full lg:w-1/2 space-y-6">
-                <span class="text-[#738D56] text-xs font-bold uppercase tracking-widest">About</span>
-                <h2 class="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                    Crafted from coconut fiber, <br> shaped with care.
-                </h2>
-                <p class="text-gray-600 text-lg leading-relaxed max-w-lg font-medium">
-                    CocoHub brings together sustainability and craftsmanship through a soft, earthy shopping experience. The visual direction is inspired by coconut coir textures, handmade warmth, and clean modern e-commerce design.
-                </p>
-            </div>
-
-            <div class="w-full lg:w-1/2">
-                <div class="aspect-[4/3] rounded-[3rem] overflow-hidden shadow-sm">
-                    <img src="{{ asset('images/about.png') }}" alt="Sustainability" class="w-full h-full object-cover">
-                </div>
-            </div>
-        </div>
-    </section>
-
     <x-buyer-footer />
 </div>
-
-<style>
-    @keyframes fade-in-up {
-        from { opacity: 0; transform: translateY(20px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    .animate-fade-in-up {
-        animation: fade-in-up 0.8s ease-out forwards;
-    }
-    html {
-        scroll-behavior: smooth;
-    }
-</style>
 @endsection
